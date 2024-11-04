@@ -1,28 +1,29 @@
 /*
 KEYWORD VIRTUAL - Polymorphism
 
-We can simplify code by using polymorphism.
-Runtime polymorphism: virtual functions.
+Polymorphism simplifies our code by using a common interface for different types.
+One way to achieve polymorphism is through runtime polymorphism, which uses virtual functions.
 
-We can simplify code by using pointers or references to a base class.
-Base pointers will call the derived version of a function instead of the base version, only when
-we use virtual functions in base class.
+We can use pointers or references to a base class to simplify the code. When we use a pointer or 
+reference to a base class, it can call the derived class version of a function instead of the base class version, 
+but only if the function is declared as virtual in the base class.
 
-Virtual function resolution only works when a virtual member function is called through a pointer or
-reference to a class type object. This works because the compiler can differentiate the type of the pointer
-or reference from the type of the object being pointed to or referenced.
-
+Virtual function resolution works when a virtual function is called through a pointer or reference to a base 
+class object. This mechanism works because the compiler can differentiate between the type of the pointer/reference 
+(which is the base class) and the actual type of the object it points to (a derived class). 
+This allows the correct, derived class version of the function to be called at runtime.
 */
 
 /*
 KEYWORD VIRTUAL - Abstract classes
 
-We can use pure virtual functions to create abstract base class, which can not be instantiated.
-We can create pure virtual functions that have definitions. It is useful when we wan base class
-to provide a default implementation for a function, but still force any derived classes to provide
-their own implementation.
+We can use pure virtual functions to create an abstract base class, which cannot be instantiated directly. 
+A pure virtual function is a virtual function that is declared with = 0. This indicates that it has no 
+implementation in the base class and must be overridden by derived classes.
 
-An interface class is a class that has no member variables, and where all of the functions are pure virtual!
+However, we can still define pure virtual functions in the base class to provide general functionalites for the derived classes. 
+
+An interface class is a special type of abstract class that has no member variables and where all functions are pure virtual. 
 */
 
 
@@ -30,33 +31,35 @@ An interface class is a class that has no member variables, and where all of the
 #define FINANCIALPRODUCT_H
 
 #include <string>
+
 // Interface class 
-class FinancialProduct {
+class FinancialProduct 
+{
 public:
-    // Whenever we are dealing with inheritance, we should make any explicit destructors virtual, 
-    // when we plan a class to be a base class. 
+    // If we plan a class to be used as a base class, its destructor should be virtual to ensure proper cleanup in derived classes.
     virtual ~FinancialProduct() = default;
     virtual double getValue() const = 0;
     virtual std::string getDescription() const = 0;
 };
 
-// Base class for Stock and Bond for a diamond inheritance
-class Asset : public FinancialProduct {
+// Base class for Stock and Bond classes to create a diamond inheritance.
+class Asset : public FinancialProduct 
+{
 protected:
     std::string name;
 
 public:
-    // We use the explicit keyword to tell the compiler that a constructor should 
-    // not be used as a converting constructor.
+    // The explicit keyword prevents this constructor from being used as a conversion constructor.
     explicit Asset(const std::string& n) : name(n) {}
     std::string getDescription() const override;
     double getValue() const override;
 
 };
 
-// Stock class inherits from Asset
-// We use virtual keyword to esnure that there's a single instance of the Asset class
-class Stock : public virtual Asset {
+// Stock class inherits from Asset class.
+// Virtual inheritance ensures a single instance of the Asset class in derived classes.
+class Stock : public virtual Asset 
+{
 private:
     double pricePerShare;
     int shares;
@@ -67,9 +70,10 @@ public:
     std::string getDescription() const override;
 };
 
-// Bond class inherits from Asset
-// We use virtual keyword to esnure that there's a single instance of the Asset class
-class Bond : public virtual Asset {
+// Bond class inherits from Asset class.
+// Virtual inheritance ensures a single instance of the Asset class in derived classes.
+class Bond : public virtual Asset 
+{
 private:
     double faceValue;
     double interestRate;
@@ -80,8 +84,9 @@ public:
     std::string getDescription() const override;
 };
 
-// Portfolio class inherits from both Stock and Bond
-class Portfolio : public Stock, public Bond {
+// Portfolio class inherits from both Stock and Bond, creating diamond inheritance.
+class Portfolio : public Stock, public Bond 
+{
 public:
     Portfolio(const std::string& n, double stockPrice, int stockQuantity, double bondFaceValue, double bondRate);
     double getValue() const override;
