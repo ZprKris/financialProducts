@@ -1,4 +1,4 @@
-# financia lProducts Project
+# Financial Products Project
 
 ### This Financial Products Project is written in C++ and demonstrates concepts such as smart pointers, polymorphism, diamond inheritance, interface classes, and explicit constructors. 
 
